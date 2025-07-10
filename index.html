@@ -77,13 +77,38 @@
       100% { transform: translateX(-100%); }
     }
     #mobile-menu {
+      display: none; /* Replace hidden to avoid Tailwind conflict */
+      flex-direction: column;
       transform: translateX(-100%);
       transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
       opacity: 0;
+      position: absolute;
+      top: 4rem; /* Match header height (h-12 logo + py-4 = ~4rem) */
+      left: 0;
+      width: 100%;
+      z-index: 40; /* Below header (z-50) */
+      background: rgba(55, 48, 163, 0.95); /* Indigo-900 with opacity */
+      padding: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      border-bottom: 2px solid #facc15; /* Yellow-400 for dropdown aesthetic */
     }
-    #mobile-menu:not(.hidden) {
+    #mobile-menu.active {
+      display: flex; /* Show as flex-column when active */
       transform: translateX(0);
       opacity: 1;
+    }
+    #mobile-menu a {
+      padding: 0.75rem 0;
+      font-size: 1.125rem; /* Larger text for readability */
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+      transition: background 0.2s ease;
+    }
+    #mobile-menu a:hover {
+      background: rgba(139, 92, 246, 0.1); /* Violet-300 hover effect */
+    }
+    #mobile-menu a:last-child {
+      border-bottom: none; /* Remove border from last item */
     }
     header {
       backdrop-filter: blur(8px);
@@ -102,6 +127,9 @@
     @media (min-width: 768px) {
       .carousel-item {
         min-width: 25%;
+      }
+      #mobile-menu {
+        display: none !important; /* Ensure hidden on desktop */
       }
     }
     .parallax {
@@ -180,13 +208,16 @@
       </nav>
       <div class="md:hidden">
         <button id="menu-toggle" class="text-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-400" aria-label="Toggle mobile menu">
-          <svg class="w-6 h-6 hover-rotate" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg id="menu-icon" class="w-6 h-6 hover-rotate" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+          <svg id="close-icon" class="w-6 h-6 hover-rotate hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
     </div>
-    <nav id="mobile-menu" class="hidden md:hidden flex-col space-y-4 bg-indigo-900 bg-opacity-90 p-6 absolute top-16 left-0 w-full shadow-md">
+    <nav id="mobile-menu" class="md:hidden flex-col bg-indigo-900 bg-opacity-90 p-6 absolute top-16 left-0 w-full shadow-md">
       <a href="#home" class="text-gray-100 hover:text-violet-300 hover-scale transition" data-aos="fade-right" data-aos-delay="100">Home</a>
       <a href="#about" class="text-gray-100 hover:text-violet-300 hover-scale transition" data-aos="fade-right" data-aos-delay="200">About</a>
       <a href="#students" class="text-gray-100 hover:text-violet-300 hover-scale transition" data-aos="fade-right" data-aos-delay="300">Students</a>
@@ -272,21 +303,21 @@
             <!-- Sample of first 10 student cards -->
             <div class="carousel-item flex-none w-full md:w-1/4 p-4">
               <div class="bg-white text-black p-4 rounded-xl shadow-lg hover-scale" data-aos="zoom-in" data-aos-delay="100">
-                <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Janet Ogwu, Best Graduating Student" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+                <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Chung Adams, Best Graduating Student" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
                 <h3 class="font-bold">Chung Adams</h3>
                 <p class="text-sm text-gray-600">Best Graduating Student</p>
               </div>
             </div>
             <div class="carousel-item flex-none w-full md:w-1/4 p-4">
               <div class="bg-white text-black p-4 rounded-xl shadow-lg hover-scale" data-aos="zoom-in" data-aos-delay="200">
-                <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Samuel Ede, Innovation Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+                <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Haruna Samuel Gyang, Innovation Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
                 <h3 class="font-bold">Haruna Samuel Gyang</h3>
                 <p class="text-sm text-gray-600">Innovation Award</p>
               </div>
             </div>
             <div class="carousel-item flex-none w-full md:w-1/4 p-4">
               <div class="bg-white text-black p-4 rounded-xl shadow-lg hover-scale" data-aos="zoom-in" data-aos-delay="300">
-                <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="David Moses, Leadership Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+                <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Abdulkadir, Leadership Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
                 <h3 class="font-bold">Abdulkadir</h3>
                 <p class="text-sm text-gray-600">Leadership Award</p>
               </div>
@@ -300,42 +331,42 @@
             </div>
             <div class="carousel-item flex-none w-full md:w-1/4 p-4">
               <div class="bg-white text-black p-4 rounded-xl shadow-lg hover-scale" data-aos="zoom-in" data-aos-delay="500">
-                <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Chinedu Okoye, Academic Excellence Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+                <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Mafai Luka Magwah, Academic Excellence Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
                 <h3 class="font-bold">Mafai Luka Magwah</h3>
                 <p class="text-sm text-gray-600">Academic Excellence</p>
               </div>
             </div>
             <div class="carousel-item flex-none w-full md:w-1/4 p-4">
               <div class="bg-white text-black p-4 rounded-xl shadow-lg hover-scale" data-aos="zoom-in" data-aos-delay="600">
-                <img src="https://randomuser.me/api/portraits/women/6.jpg" alt="Esther Nwankwo, Best Project Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+                <img src="https://randomuser.me/api/portraits/women/6.jpg" alt="Chung Adams, Best Project Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
                 <h3 class="font-bold">Chung Adams</h3>
                 <p class="text-sm text-gray-600">Best Project Award</p>
               </div>
             </div>
             <div class="carousel-item flex-none w-full md:w-1/4 p-4">
               <div class="bg-white text-black p-4 rounded-xl shadow-lg hover-scale" data-aos="zoom-in" data-aos-delay="700">
-                <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="Abdul Ibrahim, Academic Excellence Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+                <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="Abel Dauda, Academic Excellence Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
                 <h3 class="font-bold">Abel Dauda</h3>
                 <p class="text-sm text-gray-600">Academic Excellence</p>
               </div>
             </div>
             <div class="carousel-item flex-none w-full md:w-1/4 p-4">
               <div class="bg-white text-black p-4 rounded-xl shadow-lg hover-scale" data-aos="zoom-in" data-aos-delay="800">
-                <img src="https://randomuser.me/api/portraits/women/8.jpg" alt="Grace Yusuf, Community Impact Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+                <img src="https://randomuser.me/api/portraits/women/8.jpg" alt="Sumret, Community Impact Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
                 <h3 class="font-bold">Sumret</h3>
                 <p class="text-sm text-gray-600">Community Impact</p>
               </div>
             </div>
             <div class="carousel-item flex-none w-full md:w-1/4 p-4">
               <div class="bg-white text-black p-4 rounded-xl shadow-lg hover-scale" data-aos="zoom-in" data-aos-delay="900">
-                <img src="https://randomuser.me/api/portraits/men/9.jpg" alt="Emeka Okafor, Innovation Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+                <img src="https://randomuser.me/api/portraits/men/9.jpg" alt="Valentina Isesele, Innovation Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
                 <h3 class="font-bold">Valentina Isesele</h3>
                 <p class="text-sm text-gray-600">Innovation Award</p>
               </div>
             </div>
             <div class="carousel-item flex-none w-full md:w-1/4 p-4">
               <div class="bg-white text-black p-4 rounded-xl shadow-lg hover-scale" data-aos="zoom-in" data-aos-delay="0">
-                <img src="https://randomuser.me/api/portraits/women/10.jpg" alt="Fatima Bello, Leadership Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+                <img src="https://randomuser.me/api/portraits/women/10.jpg" alt="Jethro Yusuf, Leadership Award Winner" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
                 <h3 class="font-bold">Jethro Yusuf</h3>
                 <p class="text-sm text-gray-600">Leadership Award</p>
               </div>
@@ -370,31 +401,31 @@
       <div class="grid md:grid-cols-3 gap-6">
         <!-- First 10 students with bios and quotes -->
         <div class="bg-white text-black p-6 rounded-xl shadow-lg hover-scale border-2 border-transparent border-hover" data-aos="zoom-in" data-aos-delay="100">
-          <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Janet Ogwu" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Abua-Eyo Lawrence" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
           <h3 class="font-bold text-lg">Abua-Eyo Lawrence</h3>
           <p class="text-sm text-gray-600 mb-2">Top student in cost control, excelling in project management.</p>
           <p class="text-sm italic text-gray-500">"Success is planning every detail."</p>
         </div>
         <div class="bg-white text-black p-6 rounded-xl shadow-lg hover-scale border-2 border-transparent border-hover" data-aos="zoom-in" data-aos-delay="200">
-          <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Samuel Ede" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Napoleon Eunice" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
           <h3 class="font-bold text-lg">Napoleon Eunice</h3>
           <p class="text-sm text-gray-600 mb-2">Innovated cost-saving techniques for construction projects.</p>
           <p class="text-sm italic text-gray-500">"Innovation drives progress."</p>
         </div>
         <div class="bg-white text-black p-6 rounded-xl shadow-lg hover-scale border-2 border-transparent border-hover" data-aos="zoom-in" data-aos-delay="300">
-          <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="David Moses" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Kipenu Alanza" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
           <h3 class="font-bold text-lg">Kipenu Alanza</h3>
           <p class="text-sm text-gray-600 mb-2">Led team to optimize budgets for community projects.</p>
           <p class="text-sm italic text-gray-500">"Leadership builds futures."</p>
         </div>
         <div class="bg-white text-black p-6 rounded-xl shadow-lg hover-scale border-2 border-transparent border-hover" data-aos="zoom-in" data-aos-delay="400">
-          <img src="https://randomuser.me/api/portraits/women/4.jpg" alt="Blessing Audu" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/women/4.jpg" alt="Gajere Japheth" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
           <h3 class="font-bold text-lg">Gajere Japheth</h3>
           <p class="text-sm text-gray-600 mb-2">Passionate about sustainable construction practices.</p>
           <p class="text-sm italic text-gray-500">"Sustainability is key."</p>
         </div>
         <div class="bg-white text-black p-6 rounded-xl shadow-lg hover-scale border-2 border-transparent border-hover" data-aos="zoom-in" data-aos-delay="500">
-          <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Chinedu Okoye" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Bala Ruth" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
           <h3 class="font-bold text-lg">Bala Ruth</h3>
           <p class="text-sm text-gray-600 mb-2">Excelled in structural cost analysis and optimization.</p>
           <p class="text-sm italic text-gray-500">"Precision shapes success."</p>
@@ -406,25 +437,25 @@
           <p class="text-sm italic text-gray-500">"Creativity fuels excellence."</p>
         </div>
         <div class="bg-white text-black p-6 rounded-xl shadow-lg hover-scale border-2 border-transparent border-hover" data-aos="zoom-in" data-aos-delay="700">
-          <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="Abdul Ibrahim" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="Abdulkadir" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
           <h3 class="font-bold text-lg">Abdulkadir</h3>
           <p class="text-sm text-gray-600 mb-2">Mastered advanced cost estimation techniques.</p>
           <p class="text-sm italic text-gray-500">"Knowledge is power."</p>
         </div>
         <div class="bg-white text-black p-6 rounded-xl shadow-lg hover-scale border-2 border-transparent border-hover" data-aos="zoom-in" data-aos-delay="800">
-          <img src="https://randomuser.me/api/portraits/women/8.jpg" alt="Grace Yusuf" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/women/8.jpg" alt="Jethro Yusuf" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
           <h3 class="font-bold text-lg">Jethro Yusuf</h3>
           <p class="text-sm text-gray-600 mb-2">Contributed to community housing cost solutions.</p>
           <p class="text-sm italic text-gray-500">"Community first."</p>
         </div>
         <div class="bg-white text-black p-6 rounded-xl shadow-lg hover-scale border-2 border-transparent border-hover" data-aos="zoom-in" data-aos-delay="900">
-          <img src="https://randomuser.me/api/portraits/men/9.jpg" alt="Emeka Okafor" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/men/9.jpg" alt="Augustina Chioma" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
           <h3 class="font-bold text-lg">Augustina Chioma</h3>
           <p class="text-sm text-gray-600 mb-2">Pioneered tech-driven cost control methods.</p>
           <p class="text-sm italic text-gray-500">"Tech transforms ideas."</p>
         </div>
         <div class="bg-white text-black p-6 rounded-xl shadow-lg hover-scale border-2 border-transparent border-hover" data-aos="zoom-in" data-aos-delay="0">
-          <img src="https://randomuser.me/api/portraits/women/10.jpg" alt="Fatima Bello" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/women/10.jpg" alt="Abel Dauda" class="rounded-full w-24 h-24 mx-auto mb-4 hover-rotate" loading="lazy" />
           <h3 class="font-bold text-lg">Abel Dauda</h3>
           <p class="text-sm text-gray-600 mb-2">Led peers in collaborative cost-saving projects.</p>
           <p class="text-sm italic text-gray-500">"Together we achieve."</p>
@@ -450,15 +481,15 @@
       <div class="grid md:grid-cols-3 gap-8">
         <div class="bg-white text-black p-6 rounded-lg shadow-lg hover-scale transform transition duration-500" data-aos="flip-left" data-aos-delay="100">
           <h3 class="text-xl font-semibold mb-2">Best Graduating Student</h3>
-          <p class="text-purple-700 font-bold">Janet Ogwu</p>
+          <p class="text-purple-700 font-bold">Chung Adams</p>
         </div>
         <div class="bg-white text-black p-6 rounded-lg shadow-lg hover-scale transform transition duration-500" data-aos="flip-left" data-aos-delay="200">
           <h3 class="text-xl font-semibold mb-2">Innovation Award</h3>
-          <p class="text-purple-700 font-bold">Samuel Ede</p>
+          <p class="text-purple-700 font-bold">Regional Manager</p>
         </div>
         <div class="bg-white text-black p-6 rounded-lg shadow-lg hover-scale transform transition duration-500" data-aos="flip-left" data-aos-delay="300">
           <h3 class="text-xl font-semibold mb-2">Leadership Award</h3>
-          <p class="text-purple-700 font-bold">David Moses</p>
+          <p class="text-purple-700 font-bold">Emmanuel Otene</p>
         </div>
       </div>
     </div>
@@ -473,10 +504,8 @@
         <div class="bg-gray-800 p-5 rounded-xl hover-scale" data-aos="fade-up" data-aos-delay="200">Measurement of Heavy Engineering</div>
         <div class="bg-gray-800 p-5 rounded-xl hover-scale" data-aos="fade-up" data-aos-delay="300">Contract Administration</div>
         <div class="bg-gray-800 p-5 rounded-xl hover-scale" data-aos="fade-up" data-aos-delay="400">Construction Marketing</div>
-        <div class="bg-gray-800 p-5 rounded-xl hover-scale" data-aos="fade-up" 
-        data-aos-delay="500">Cost Control</div>
-        <div class="bg-gray-800 p-5 rounded-xl hover-scale" data-aos="fade-up" 
-        data-aos-delay="500">Building Information Modelling</div>
+        <div class="bg-gray-800 p-5 rounded-xl hover-scale" data-aos="fade-up" data-aos-delay="500">Cost Control</div>
+        <div class="bg-gray-800 p-5 rounded-xl hover-scale" data-aos="fade-up" data-aos-delay="500">Building Information Modelling</div>
       </div>
     </div>
   </section>
@@ -510,17 +539,17 @@
       <h2 class="text-4xl font-bold mb-8 animate-zoomIn" data-aos="zoom-in">👨‍🏫 Our Staff</h2>
       <div class="grid md:grid-cols-3 gap-6">
         <div class="bg-gray-100 p-5 rounded-xl hover-scale" data-aos="flip-right" data-aos-delay="100">
-          <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Dr. John Doe, Head of Department" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Dr. Olalekan Afeez Doe, Head of Department" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
           <h3 class="font-bold">Dr. Olalekan Afeez Doe</h3>
           <p class="text-sm text-gray-600">Head of Department</p>
         </div>
         <div class="bg-gray-100 p-5 rounded-xl hover-scale" data-aos="flip-right" data-aos-delay="200">
-          <img src="https://randomuser.me/api/portraits/women/6.jpg" alt="Prof. Jane Smith, Senior Lecturer" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/women/6.jpg" alt="Prof. Job O.F, Senior Lecturer" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
           <h3 class="font-bold">Prof. Job O.F</h3>
           <p class="text-sm text-gray-600">Senior Lecturer</p>
         </div>
         <div class="bg-gray-100 p-5 rounded-xl hover-scale" data-aos="flip-right" data-aos-delay="300">
-          <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="Dr. Michael Brown, Course Coordinator" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
+          <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="Mr. Efole Friday, Student Advisor" class="rounded-full w-24 h-24 mx-auto mb-2 hover-rotate" loading="lazy" />
           <h3 class="font-bold">Mr. Efole Friday</h3>
           <p class="text-sm text-gray-600">Student Advisor</p>
         </div>
@@ -562,15 +591,34 @@
     // Mobile Menu Toggle
     const mobileMenu = document.getElementById('mobile-menu');
     const menuToggle = document.getElementById('menu-toggle');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
+
     menuToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-      menuToggle.setAttribute('aria-expanded', mobileMenu.classList.contains('hidden') ? 'false' : 'true');
+      mobileMenu.classList.toggle('active');
+      const isOpen = mobileMenu.classList.contains('active');
+      menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      menuIcon.classList.toggle('hidden', isOpen);
+      closeIcon.classList.toggle('hidden', !isOpen);
     });
+
     document.querySelectorAll('#mobile-menu a').forEach(link => {
       link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('active');
         menuToggle.setAttribute('aria-expanded', 'false');
+        menuIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
       });
+    });
+
+    // Close menu on outside click
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !menuToggle.contains(e.target) && mobileMenu.classList.contains('active')) {
+        mobileMenu.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+      }
     });
 
     // Scroll Reveal
